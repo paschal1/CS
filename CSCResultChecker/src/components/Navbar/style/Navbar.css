@@ -1,0 +1,48 @@
+/* Teko Font Link */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Teko:wght@300;400;500;600;700&display=swap");
+
+nav {
+  background-color: #144a77;
+  position: fixed;
+  width: 100%;
+}
+
+.inner_nav {
+  width: 85%;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inner_nav button{
+  padding: 10px 30px;
+  background: #e74c3c;
+  color: #f2f2f2;
+  margin: 0 auto;
+  font-weight: 700;
+  border-radius: 7px;
+  border: none;
+  outline: none;
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+}
+
+.inner_nav h2 {
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-left: -100px;
+  font-family: "Teko", sans-serif;
+}
+
+/* Medium Screens */
+@media (max-width: 480px) {
+  .inner_nav {
+    width: 92%;
+    /* justify-content: center; */
+  }
+
+  .inner_nav h2 {
+    display: none;
+  }
+}
