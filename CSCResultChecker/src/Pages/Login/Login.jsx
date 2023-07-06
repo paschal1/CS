@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react';
-import axiosClient from '../../../../../CSCResultChecker/CSCResultChecker/src/axios';
+import axiosClient from '../../axios';
 import { NavLink, Navigate } from 'react-router-dom';
+
+import './style/login.css'
 
 const Login = () => {
   const emailRef = useRef();
@@ -43,37 +45,38 @@ const Login = () => {
   
   return (
     <main className="Login">
-      <div className="Login_header">
-        <h1>Login</h1>
-      </div>
-      <p>Sign in to check Result</p>
-      <form className="login_form" onSubmit={handleLogin}>
-
-        <div className="inner_form">
-          <label htmlFor="">Email</label>
-          <input ref={emailRef} type="text" placeholder="Enter Matriculation Number" />
+      <div className="form-body">
+        <div className="Login_header">
+          <h1>Login</h1>
         </div>
-        <div className="inner_form">
-          <label htmlFor="">Password</label>
-          <input ref={passwordRef} type="password" placeholder="Enter Password" />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <div className="Login_section">
-        <span>
-          Don't have an account?
-          <NavLink to="/register" style={{ textDecoration: "none", color: "#1c2767" }}>
-            Register
-          </NavLink>
-        </span>
-         {errors && (
-          <div className="alert">
-            {Object.keys(errors).map((key) => (
-              <p key={key}>{errors[key][0]}</p>
-            ))}
+        <p className="login_p">Sign in to check Result</p>
+        <form className="l-form" onSubmit={handleLogin}>
+          <div className="inner_lform">
+            <label htmlFor="">Email:</label>
+            <input ref={emailRef} type="text" placeholder="Enter Matriculation Number" />
           </div>
-        )}
-
+          <div className="inner_lform">
+            <label htmlFor="">Password:</label>
+            <input ref={passwordRef} type="password" placeholder="Enter Password" />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+        <div className="L_section">
+          {/* <span>
+            Don't have an account?
+            <NavLink to="/register" style={{ textDecoration: "none", color: "#1c2767" }}>
+              Register
+            </NavLink>
+          </span> */}
+          {errors && (
+            <div className="lalert">
+              {Object.keys(errors).map((key) => (
+                <p key={key}>{errors[key][0]}</p>
+              ))}
+              <p>Err</p>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );

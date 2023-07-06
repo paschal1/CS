@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {useRef} from 'react'
-import axiosClient from '../../../../../CSCResultChecker/CSCResultChecker/src/axios';
+import axiosClient from '../../axios';
 // stylesheet
 import "./style/Register.css";
 
