@@ -7,10 +7,10 @@ import { useStateContext } from "./contexts/ContextProvider";
 
 export default function GusetLayout() {
 
-    const { user, token } = useStateContext()
+    const { currentUser, userToken } = useStateContext()
 
-if (token) {
-    return <Navigate to="/" />
+if (userToken) {
+    return <Navigate to="/check_result" />
   }
 
 

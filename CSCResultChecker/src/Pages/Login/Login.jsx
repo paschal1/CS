@@ -1,48 +1,58 @@
-import React, { useRef, useState } from 'react';
+import React, {  useState } from 'react';
 import axiosClient from '../../axios';
 import { NavLink, Navigate } from 'react-router-dom';
+import { useStateContext } from '../../contexts/ContextProvider';
 
 import './style/login.css'
 
 const Login = () => {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const [errors, setErrors] = useState(null);
+  const { setCurrentUser, setUserToken} = useStateContext();
+    const [email, setEmail] = useState('');
+    //const [mat_no, setMat_no] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState({ __html: '' });
 
   const handleLogin = (event) => {
     event.preventDefault();
+    setError({ __html: '' })
+
+    const playload = {
+
+      email,
+      //mat_no,
+      password,
+
+    }
+
+    //  console.log(playload);
+
+    axiosClient.get('/sanctum/csrf-cookie').then(response => {
 
 
-    const payload = {
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-    };
+      axiosClient.post('/login', playload)
+        .then(({ data }) => {
 
-    setErrors(null);
+           setCurrentUser(data.user)
+           setUserToken(data.token)
 
-    axiosClient
-      .post('/login', payload)
-      .then(({ data }) => {
-        setUser(data.user);
-        setToken(data.token);
-      })
-      .catch((err) => {
-        const response = err.response;
-        if (response && response.status === 422) {
-          if (response.data.errors) {
-            setErrors(response.data.errors);
-            debugger
-          } else {
-            setErrors({
-              email: [response.data.message],
-            });
-          }
+
+        })
+
+      .catch ((error) => {
+        if (error.response) {
+        const finalErrors =  Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+
+          setError({__html: finalErrors.join('<br>')})
         }
+        console.error(error);
       });
+
+      });
+
+
   };
 
-  
+
   return (
     <main className="Login">
       <div className="form-body">
@@ -53,13 +63,18 @@ const Login = () => {
         <form className="l-form" onSubmit={handleLogin}>
           <div className="inner_lform">
             <label htmlFor="">Email:</label>
-            <input ref={emailRef} type="text" placeholder="Enter Matriculation Number" />
+            <input value={email} onChange={event => setEmail(event.target.value)}  type="text" placeholder="Enter Matriculation Number" />
           </div>
           <div className="inner_lform">
             <label htmlFor="">Password:</label>
-            <input ref={passwordRef} type="password" placeholder="Enter Password" />
+
+            <input value={password} onChange={event => setPassword(event.target.value)} type="password" placeholder="Enter Password" />
           </div>
           <button type="submit">Login</button>
+
+           {error.__html && (<div className='bg-red-500 rounded py-2 px-3 text-white' dangerouslySetInnerHTML={error}></div>)}
+
+
         </form>
         <div className="L_section">
           {/* <span>
@@ -68,14 +83,14 @@ const Login = () => {
               Register
             </NavLink>
           </span> */}
-          {errors && (
+          {/* {errors && (
             <div className="lalert">
               {Object.keys(errors).map((key) => (
                 <p key={key}>{errors[key][0]}</p>
               ))}
               <p>Err</p>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </main>

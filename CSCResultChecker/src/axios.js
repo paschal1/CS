@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from './router';
 
 const axiosClient = axios.create(
     {
@@ -6,7 +7,7 @@ const axiosClient = axios.create(
     }
 )
 axiosClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('ACCESS_TOKEN');// todo
+    const token = '1234';//localStorage.getItem('ACCESS_TOKEN');// todo
     config.headers.Authorization = `Bearer ${token}`
     return config
 });
@@ -16,8 +17,8 @@ axiosClient.interceptors.response.use(response => {
 }, (error) => {
     const { response } = error;
     if (error.response && error.response.status === 401) {
-        localStorage.removeItem('ACCESS_TOKEN')
-        router.navigate('/check_result')
+      //  localStorage.removeItem('ACCESS_TOKEN')
+        router.navigate('/login')
         return error;
     }
     throw error;

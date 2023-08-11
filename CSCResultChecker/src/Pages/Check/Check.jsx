@@ -7,13 +7,29 @@ import "./style/Result.css";
 // React icons
 import { BiSearchAlt } from "react-icons/bi";
 import { GiCancel } from "react-icons/gi";
+import axiosClient from '../../axios';
 
 // Nav link
 import { NavLink } from "react-router-dom";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 const Check = () => {
   const [show, setShow] = useState(true);
   const [hide, setHide] = useState(false);
+
+  const { setCurrentUser, setUserToken} = useStateContext();
+    const [email, setEmail] = useState('');
+    //const [mat_no, setMat_no] = useState('');
+  const [mat_no, setMat_no] = useState('');
+  const [result, setResult] = useState(null);
+    const [error, setError] = useState({ __html: '' });
+
+  // const handleCheck = (event) => {
+  //   event.preventDefault();
+
+
+
+  // };
 
   // Result data
 
@@ -124,8 +140,47 @@ const Check = () => {
   // result checker function
   const resultChecker = (event) => {
     event.preventDefault();
-    setShow(false);
-    setHide(true);
+
+    setError({ __html: '' })
+
+    // const playload = {
+
+    //   email,
+    //   mat_no,
+
+
+    // }
+
+    //  console.log(playload);
+
+    axiosClient.get('/sanctum/csrf-cookie').then(response => {
+
+
+      axiosClient.get(`/check?email=${email}&mat_no=${mat_no}`)
+        .then(({ data }) => {
+
+          //  setCurrentUser(data.user)
+          //  setUserToken(data.token)
+
+           setShow(false);
+           setHide(true);
+
+        })
+
+      .catch ((error) => {
+        setError('Result not found');
+        setResult(null);
+        if (error.response) {
+          const finalErrors =  Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], [])
+
+          setError({__html: finalErrors.join('<br>')})
+        }
+        console.error(error);
+      });
+
+    });
+
+
   };
 
   // hide result container
@@ -141,14 +196,18 @@ const Check = () => {
       </div>
       {show ? (
         <div>
+
+          {error.__html && (<div className='bg-red-500 rounded py-2 px-3 text-white' dangerouslySetInnerHTML={error}></div>)}
+
+
           <form action="" className="check_form" onSubmit={resultChecker}>
             <div className="inner_form inner_check_form">
               <label htmlFor="">Enter Your Mat Number:</label>
-              <input type="name" placeholder="Matriculation Number" required />
+              <input type="name" value={mat_no} onChange={event => setMat_no(event.target.value)} placeholder="Matriculation Number" required />
             </div>
             <div className="inner_form inner_check_form">
               <label htmlFor="">Enter Your School Email:</label>
-              <input type="email" placeholder="Valid School Email" required />
+              <input type="email" value={email} onChange={event => setEmail(event.target.value)} placeholder="Valid School Email" required />
             </div>
             <div className="check_button">
               <button>
@@ -156,7 +215,7 @@ const Check = () => {
               </button>
             </div>
           </form>
-          <div className="register_section check_section">
+          {/* <div className="register_section check_section">
             <span>
               Don't have an account?{" "}
               <NavLink
@@ -166,7 +225,7 @@ const Check = () => {
                 Register
               </NavLink>
             </span>
-          </div>
+          </div> */}
         </div>
       ) : (
         false

@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Password;
 
-class LoginRequest extends FormRequest
+class StoreCourseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,6 +16,13 @@ class LoginRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'student_id'=> $this->user()->id
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,11 +31,10 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-
-
-            'email' => 'required|exists:users,email',
-            
-            'password' => 'required'
+            'student_id' => 'exists:users,id',
+            'level_id' => 'exists:users,id',
+            'course_name' => 'required',
+            'course_code' => 'required'
         ];
     }
 }

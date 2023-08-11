@@ -7,11 +7,11 @@ import { useStateContext } from "./contexts/ContextProvider";
 
 export default function Layout() {
 
-  const { user, token } = useStateContext()
+  const { currentUser, userToken } = useStateContext()
 
 
-if (!token) {
-    return <Navigate to="/login" />
+if (!userToken) {
+    return <Navigate to="login" />
   }
 
 

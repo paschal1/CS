@@ -1,33 +1,42 @@
 import { createContext, useContext } from "react";
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
 
 const StateContext = createContext({
     // currentUser: null,
 
-    user: null,
-    token: null,
-    setUser: () => {},
-    setToken: () =>{}
+    currentUser: {},
+    userToken: null,
+    setCurrentUser: () => {},
+    setUserToken: () =>{}
 })
 
 export const ContextProvider = ({ children }) => {
-    const [user, setUser] = useState({});
-    const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
-    const setToken = (token) => {
-        _setToken(token)
+    const [currentUser, setCurrentUser] = useState({
+        // name: "Paschal Nwokeocha",
+        // email: "paschalnwokeocha@gmail.com",
+        // address: "Choba extension East West Road",
+    });
+    const [userToken, _setUserToken] = useState(localStorage.getItem('TOKEN') || '');
+
+
+    const setUserToken = (token) => {
+       // _setUserToken(token)
         if (token) {
-            localStorage.setItem('ACCESS_TOKEN', token);
+            localStorage.setItem('TOKEN', token);
         } else {
-            localStorage.removeItem('ACCESS_TOKEN')
+            localStorage.removeItem('TOKEN')
         }
+        _setUserToken(token);
     }
+
+
     return (
         <StateContext.Provider value={{
-            user,
-            token,
-            setUser,
-            setToken
+            currentUser,
+            userToken,
+            setCurrentUser,
+            setUserToken
         }}>
             {children}
         </StateContext.Provider>

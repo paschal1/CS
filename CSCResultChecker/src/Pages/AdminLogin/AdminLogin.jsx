@@ -79,7 +79,7 @@ const AdminLogin = () => {
           <div className="card-form-p">
             <p>Don't have an account? <NavLink to="/admin/register">Register</NavLink></p>
             </div>
-            
+
           </form>
         </div>
       </div>
